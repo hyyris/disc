@@ -1,18 +1,24 @@
 package com.hyyry.disc;
 
-import android.app.Fragment;
+
+import com.hyyry.objects.Field;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class FragmentHole extends Fragment implements OnClickListener {
 	
 	Button btnLess, btnMore;
 	TextView holeNro, par;
+	
+	private ReplaceListener mListener; //Tää on vaan loppuu varten... SIIRRÄ
 	
 	
 	@Override
@@ -28,12 +34,17 @@ public class FragmentHole extends Fragment implements OnClickListener {
 		
 		par.setText("1");
 		
+		
 		Field.addOne();
 		holeNro.setText(Field.getHolesCount()+"");
+		
+		int holeNroValue = Integer.parseInt(holeNro.getText().toString());
+		Field.setHelperHole((holeNroValue-1), 1);
 		
 		btnLess.setOnClickListener(this);
 		btnMore.setOnClickListener(this);
 	   
+		 mListener = (ReplaceListener) this.getParentFragment(); //Poista ajan kanssa!
 		
 		return rootView;
 	}
@@ -47,13 +58,13 @@ public class FragmentHole extends Fragment implements OnClickListener {
 			parValue--;
 			par.setText(parValue+"");
 			
-			Field.setHelperHole(holeNroValue, parValue);
+			Field.setHelperHole((holeNroValue-1), parValue);
 		}
 		else if (v == btnMore) {
 			parValue++;
 			par.setText(parValue+"");
 			
-			Field.setHelperHole(holeNroValue, parValue);
+			Field.setHelperHole((holeNroValue-1), parValue);
 		}
 		else {
 			
@@ -61,6 +72,5 @@ public class FragmentHole extends Fragment implements OnClickListener {
         
 
     }
-	
 
 }

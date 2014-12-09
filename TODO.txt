@@ -1,0 +1,31 @@
+setOffscreenPageLimit(2)
+muisti/suorituskyky
+
+notifyDataSetChanged() //voisko hyödyntää tietojen kirjotukseen öliöihin
+
+android:ems="10" saa kait koon järkeväks
+paddingiä voi muuttaa ni saa kivat reunat
+
+animaatiota esim listeihin:
+http://developer.android.com/training/animation/screen-slide.html
+http://developer.android.com/training/animation/cardflip.html
+
+
+ratkaisu kaikkiin ongelmiin saattaa olla:
+FragmentStatePagerAdapter //nojaa ei kyl oo
+
+En osaa perkelettä saada käyntiin. Kasallinen turhia classeja ja xamlia jotka voi poistaa jos ei lähe liikenteeseen. Vittu mitä paskaaaaaa!
+ja ohje jota noudatettu btw:
+http://developer.android.com/training/animation/screen-slide.html
+
+viewPager tän ohjeen mukaan tehty:
+https://github.com/codepath/android_guides/wiki/ViewPager-with-FragmentPagerAdapter
+
+laittaa gridiin:
+nimi | - | X | +
+ni napiskan saa ku pyytää vaan sen sijaintia
+Button button = (Button) gridView.getChildAt(position);
+http://stackoverflow.com/questions/20129337/android-gridview-with-custom-baseadapter-get-clicked-view-at-position
+
+BUGI, JOS MENEE PELIIN ILMAN PELAAJII, BACKII JA TAKAS NI EI TOIMI
+VOIS OIKEESTAA LAITTAA NII ET PELISSÄ EI TOIMI BACKI... eh sit jumittaa... joku rasittava popuppi?

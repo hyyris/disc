@@ -1,32 +1,41 @@
 package com.hyyry.disc;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import com.hyyry.database.FieldDAO;
+import com.hyyry.objects.Field;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class FragmentNewCourse extends Fragment implements OnClickListener {
 	
-	Button btn1, btn2, btn3;
+	Button btn1, btn2, btn3, btn4;
 	EditText name;
+	private FieldDAO dao;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		View rootView = inflater.inflate(R.layout.newcourse_fragment, container, false);
 		
+		dao = new FieldDAO(getActivity());
+		
 		btn1 = (Button)rootView.findViewById(R.id.btnSaveC);
 		btn2 = (Button)rootView.findViewById(R.id.btn1);
 		btn3 = (Button)rootView.findViewById(R.id.btn2);
+		btn4 = (Button)rootView.findViewById(R.id.btnDeleteC);
 
 		btn1.setOnClickListener(this);
 		btn2.setOnClickListener(this);
 		btn3.setOnClickListener(this);
+		btn4.setOnClickListener(this);
 		
 		name = (EditText)rootView.findViewById(R.id.nimi);
 		
@@ -39,8 +48,7 @@ public class FragmentNewCourse extends Fragment implements OnClickListener {
 	@Override
     public void onClick(View v) {
 		
-		if (v == btn1) {
-			//TODO seivaus... alempi on perjaatteessa seivaus!
+		if (v == btn1) { //Save
 			String nimi = name.getText().toString();
 			
 			if ((Field.getHolesCount() > 0) && (nimi.length() > 0)) {
@@ -48,18 +56,15 @@ public class FragmentNewCourse extends Fragment implements OnClickListener {
 				field.setHoles(Field.helperHoles);
 				field.setName(nimi);
 				Field.addField(field);
+				
+				dao.createField(field);
+				
 			}
 			else {
-				//TODO ilmotus ettei tallenneta ku ei oo mitään tallennettavaa
+				Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
 			}
 			
-			
-			Fragment newFragment = new FragmentStart();
-			FragmentTransaction transaction = getFragmentManager().beginTransaction();
-			//transaction.replace(R.id.myFragment, newFragment);
-			transaction.replace(R.id.container, newFragment);
-			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE); //Turha, mut näitä voi hyödyntää myöhemmin
-			transaction.commit();
+			getActivity().getSupportFragmentManager().popBackStackImmediate();
 			
 		}
 		else if (v == btn2) {
@@ -72,7 +77,7 @@ public class FragmentNewCourse extends Fragment implements OnClickListener {
 			//transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE); //Turha, mut näitä voi hyödyntää myöhemmin
 			transaction.commit();
 		}
-		else {
+		else if (v == btn3) {
 			if (Field.removeHelper.size() < 1)
 				return;
 			else {
@@ -82,6 +87,15 @@ public class FragmentNewCourse extends Fragment implements OnClickListener {
 				getFragmentManager().beginTransaction().remove(newFragment).commit();
 			}
 			
+		}
+		else {
+			Fragment newFragment = new DeleteCourse();
+			FragmentTransaction transaction = getFragmentManager().beginTransaction();
+			transaction.replace(R.id.container, newFragment);
+			//transaction.replace(R.id.container, newFragment);
+			transaction.addToBackStack(null); //Back nappi toimimaan
+			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE); //Turha, mut näitä voi hyödyntää myöhemmin
+			transaction.commit();
 		}
         
 	}
